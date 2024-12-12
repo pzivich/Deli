@@ -1,8 +1,12 @@
 Basics
 =====================================
 
-Here, the basics of M-estimator will be reviewed. An M-estimator, :math:`\hat{\theta}`, is defined as the solution to
-the estimating equation
+Here, the basics of the provided estimation approaches are described.
+
+M-estimator
+-------------------------------
+
+An M-estimator, :math:`\hat{\theta}`, is defined as the solution to the estimating equation
 
 .. math::
 
@@ -13,15 +17,34 @@ where :math:`\psi` is a known :math:`v \times 1`-dimension estimating function, 
 :math:`i \in \{1,...,n\}`, and the parameters are the vector :math:`\theta = (\theta_1, \theta_2, ..., \theta_v)`. Note
 that :math:`v` is finite-dimensional and the number of parameters matches the dimension of the estimating functions.
 
-Point Estimation
--------------------------------
-To implement the point estimation of :math:`\theta`, we use a *root-finding* algorithm. Root-finding algorithms are
+In this equation, we use a *root-finding* algorithm to solve for :math:`\theta`. Root-finding algorithms are
 procedures for finding the zeroes (i.e., roots) of an equation. This is accomplished in ``delicatessen`` by using
 SciPy's root-finding algorithms.
 
+GMM-estimator
+-------------------------------
+
+The generalized method of moments (GMM) estimator is instead defined as the solution to
+
+.. math::
+
+    \text{argmin}_{\theta} \left[ \sum_{i=1}^n \psi(O_i, \hat{\theta}) \right]
+        \text{Q}
+        \left[ \sum_{i=1}^n \psi(O_i, \hat{\theta}) \right]
+
+
+Here, :math:`\text{\Q}` is a weight matrix. Note that solving this equation is equivalent to the M-estimator is
+the case when the dimensions of the parameters and estimating functions match. When there are more estimating functions
+than parameters (i.e., over-identified), the M-estimator can no longer be applied but the GMM-estimator can be.
+
+Unlike the M-estimator, we use a minimization algorithm to solve for :math:`\theta`. This is accomplished in
+``delicatessen`` by using SciPy's root-finding algorithms.
+
 Variance Estimation
 -------------------------------
-To estimate the variance for :math:`\theta`, the M-estimator uses the empirical sandwich variance estimator:
+
+Regardless of the chosen point-estimation strategy, the empirical sandwich variance estimator is used to estimate the
+variance for :math:`\theta`:
 
 .. math::
 
@@ -31,9 +54,9 @@ where the 'bread' is
 
 .. math::
 
-    B_n(O,\hat{\theta}) = n^{-1} \sum_{i=1}^n - \psi'(O_i, \hat{\theta})
+    B_n(O,\hat{\theta}) = n^{-1} \sum_{i=1}^n - \nabla \psi(O_i, \hat{\theta})
 
-where the :math:`\psi'` indicates the partial derivative, and the 'filling' is
+where the :math:`\nabla` indicates the partial derivatives, and the 'filling' is
 
 .. math::
 
@@ -41,11 +64,7 @@ where the :math:`\psi'` indicates the partial derivative, and the 'filling' is
 
 The sandwich variance requires finding the derivative of the estimating functions and some matrix algebra. Again, we
 can get the computer to complete all these calculations for us. For the derivative, ``delicatessen`` offers two
-options. First, the derivatives can be numerically approximated using the central difference method. This is done using
-SciPy's ``approx_fprime`` functionality. As of ``v2.0``, the derivatives can also be computed using forward-mode
-automatic differentiation. This approach provides the exact derivative (as opposed to an approximation). This is
-implemented by-hand in ``delicatessen`` via operator overloading. Finally, we use forward-mode because there is no
-time advantage of backward-mode because the Jacobian is square.
+options: numerical approximation or forward-mode automatic differentiation.
 
 Automatic Differentiation Caveats
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^

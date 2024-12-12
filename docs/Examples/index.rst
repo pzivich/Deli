@@ -1,9 +1,8 @@
 Applied Examples
 ==========================
 
-This section provides illustrative examples of application of M-estimators. This includes the replication of examples
-from textbooks and published scientific articles. These examples include built-in estimating equations and use of
-user-built estimating equations.
+This section provides illustrative applications. This includes the replication of examples from textbooks and published
+scientific articles. These examples include built-in estimating equations and use of user-built estimating equations.
 
 
 .. toctree::

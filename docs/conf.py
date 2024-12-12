@@ -35,6 +35,7 @@ def get_version():
 extensions = [
     "nbsphinx",
     "sphinx.ext.coverage",
+    'sphinx.ext.inheritance_diagram',
     "sphinx.ext.mathjax",
     "sphinx.ext.autosectionlabel",
     "sphinx.ext.napoleon",
@@ -53,9 +54,11 @@ master_doc = "index"
 
 # generate autosummary pages
 autosummary_generate = True
+autodoc_default_flags = ['members', 'undoc-members', 'inherited-members']
 autodoc_default_options = {
     'members': True,
     'member-order': 'bysource',
+    'autosummary': True,
 }
 
 # General information about the project.

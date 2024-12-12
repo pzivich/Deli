@@ -18,7 +18,7 @@ from delicatessen.estimating_equations import (ee_mean_variance, ee_mean_robust,
                                                ee_regression, ee_glm, ee_robust_regression, ee_ridge_regression,
                                                ee_additive_regression,
                                                ee_weibull_model, ee_aft_weibull,
-                                               ee_4p_logistic, ee_effective_dose_delta,
+                                               ee_loglogistic, ee_loglogistic_ed,
                                                ee_gformula, ee_ipw, ee_ipw_msm, ee_aipw, ee_gestimation_snmm,
                                                ee_mean_sensitivity_analysis)
 
@@ -1380,15 +1380,15 @@ class TestSandwichAutoDiff:
         resp_data = d[:, 0]
 
         def psi(theta):
-            pl4 = ee_4p_logistic(theta=theta, X=dose_data, y=resp_data)
-            ed20 = ee_effective_dose_delta(theta[4], y=resp_data, delta=0.20,
-                                           steepness=theta[2], ed50=theta[1],
-                                           lower=theta[0], upper=theta[3])
+            pl4 = ee_loglogistic(theta=theta, dose=dose_data, response=resp_data)
+            ed20 = ee_loglogistic_ed(theta[4], dose=dose_data, delta=0.20,
+                                     steepness=theta[2], ed50=theta[1],
+                                     lower=theta[0], upper=theta[3])
 
             # Returning stacked estimating equations
             return np.vstack([pl4, ed20])
 
-        mestr = MEstimator(psi, init=[0.48, 3.05, 2.98, 7.79, 1.8])
+        mestr = MEstimator(psi, init=[0, 10, 3, 2, 1])
 
         # Central difference method
         mestr.estimate(solver='lm', deriv_method='approx')
@@ -1396,7 +1396,7 @@ class TestSandwichAutoDiff:
         var_approx = mestr.variance
 
         # Auto-differentation
-        mestr.estimate(solver='hybr', deriv_method='exact')
+        mestr.estimate(solver='lm', deriv_method='exact')
         bread_exact = mestr.bread
         var_exact = mestr.variance
 

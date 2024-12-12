@@ -184,17 +184,18 @@ def compute_bread(stacked_equations, theta, deriv_method, dx=1e-9):
         Returns a `p`-by-`p` NumPy array for the input ``theta``, where ``p = len(theta)``
     """
     def estimating_equation(input_theta):
-        if len(input_theta) == 1:
-            return np.sum(stacked_equations(theta=input_theta))
+        ef = np.asarray(stacked_equations(theta=input_theta))
+        if ef.ndim == 1:
+            return np.sum(ef)
         else:
-            return np.sum(stacked_equations(theta=input_theta), axis=1)
+            return np.sum(ef, axis=1)
 
     # Compute the derivative
     if deriv_method.lower() == 'approx':
         bread_matrix = approx_fprime(xk=theta,
                                      f=estimating_equation,
                                      epsilon=dx)
-        if len(theta) == 1:
+        if bread_matrix.ndim == 1:
             bread_matrix = np.asarray([bread_matrix, ])
     elif deriv_method.lower() == 'capprox':
         bread_matrix = approx_differentiation(xk=theta,

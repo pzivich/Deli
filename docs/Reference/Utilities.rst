@@ -43,3 +43,14 @@ Differentiation
 
   approx_differentiation
   auto_differentiation
+
+
+Sandwich Variance Estimator
+---------------------------
+
+.. currentmodule:: delicatessen.sandwich
+
+.. autosummary::
+   :toctree: generated/
+
+   compute_sandwich

@@ -479,8 +479,7 @@ def spline(variable, knots, power=3, restricted=True, normalized=False):
         return the same number of columns as knots
     normalized : bool, optional
         Whether to normalize, or divide, the spline terms by the difference between the upper and lower knots. Default
-        is ``False``, which corresponds to unnormalized splines. The default will update to ``True`` in the v3.0
-        release.
+        is ``False``, which corresponds to unnormalized splines.
 
     Returns
     -------

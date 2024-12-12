@@ -11,5 +11,5 @@ $ python -m pip install delicatessen
 
 from .version import __version__
 
-from .mestimation import MEstimator
+from .estimation import MEstimator, GMMEstimator
 from .sandwich import compute_sandwich

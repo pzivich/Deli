@@ -1,9 +1,10 @@
-M-estimator
-===========
+GMM-estimator
+=============
 
 .. currentmodule:: delicatessen.estimation
 
-.. autoclass:: MEstimator
+.. autoclass:: GMMEstimator
    :members:
    :undoc-members:
    :inherited-members:
+   :no-index:
